@@ -28,7 +28,18 @@ class Program
 
         TestRunner runner = new TestRunner();
         TestSummary summary = runner.Run(tests);
-        
+
+        for (int i = 0; i < tests.Count; i ++)
+        {
+            string status = summary.Results[i] ? "PASS": "FAIL";
+
+            Console.WriteLine($"{tests[i].TestName}: {status}");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Total tests: {summary.TotalTests}");
+        Console.WriteLine($"Passed tests: {summary.PassedTests}");
+        Console.WriteLine($"Failed tests: {summary.FailedTests}");
 
 
 
