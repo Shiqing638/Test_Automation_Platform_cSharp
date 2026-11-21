@@ -1,39 +1,34 @@
-﻿using System;
-
+﻿using TestFlow.Models;
+using TestFlow.Services;
 class Program
 {
     static void Main(string[] args)
     {
-        List<double> voltages = new() {4.5, 5.2, 4.8, 5.5, 4.9};
-
-        double maxLimit = 5.0;
-        int passedCount = 0;
-        double total = 0.0;
-
-        foreach (double voltage in voltages)
+        List<TestResult> tests = new()
         {
-            bool passed = IsVoltageValid(voltage, maxLimit);
-            
-            if (passed)
+            new TestResult
             {
-                Console.WriteLine($"{voltage} V: pass");
-                passedCount++;
-            }
-            else
+                TestName = "Voltage Test 1",
+                MeasuredValue = 4.5,
+                MaxLimit = 5.0
+            },
+            new TestResult
             {
-                Console.WriteLine($"{voltage} V: fail");
-            }
+                TestName = "Voltage Test 2",
+                MeasuredValue = 5.3,
+                MaxLimit = 5.0
+            },
+            new TestResult
+            {
+                TestName = "Voltage Test 3",
+                MeasuredValue = 4.8,
+                MaxLimit = 5.0
+            },            
+        };
 
-            total += voltage;
-        }
+        TestRunner runner = new TestRunner();
+        runner.Run(tests);
 
-        double average = total / voltages.Count;
-        Console.WriteLine();
-        Console.WriteLine($"Average voltage: {average} V");
-    }
 
-    static bool IsVoltageValid(double voltage, double maxLimit)
-    {
-        return voltage <= maxLimit;
     }
 }
