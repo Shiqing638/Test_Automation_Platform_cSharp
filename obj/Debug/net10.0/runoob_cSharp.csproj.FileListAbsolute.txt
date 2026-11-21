@@ -1,0 +1,14 @@
+C:\Shiqing_work\runoob_cSharp\bin\Debug\net10.0\runoob_cSharp.exe
+C:\Shiqing_work\runoob_cSharp\bin\Debug\net10.0\runoob_cSharp.deps.json
+C:\Shiqing_work\runoob_cSharp\bin\Debug\net10.0\runoob_cSharp.runtimeconfig.json
+C:\Shiqing_work\runoob_cSharp\bin\Debug\net10.0\runoob_cSharp.dll
+C:\Shiqing_work\runoob_cSharp\bin\Debug\net10.0\runoob_cSharp.pdb
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.AssemblyInfoInputs.cache
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.AssemblyInfo.cs
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.csproj.CoreCompileInputs.cache
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.dll
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\refint\runoob_cSharp.dll
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.pdb
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\runoob_cSharp.genruntimeconfig.cache
+C:\Shiqing_work\runoob_cSharp\obj\Debug\net10.0\ref\runoob_cSharp.dll
