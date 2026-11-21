@@ -27,7 +27,9 @@ class Program
         };
 
         TestRunner runner = new TestRunner();
-        runner.Run(tests);
+        TestSummary summary = runner.Run(tests);
+        
+
 
 
     }

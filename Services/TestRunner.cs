@@ -6,25 +6,25 @@ namespace TestFlow.Services;
 
 public class TestRunner
 {
-    public void Run(List<TestResult> tests)
+    public TestSummary Run(List<TestResult> tests)
     {
         int passedCount = 0;
         foreach (TestResult test in tests)
         {
             bool passed = test.IsPassed();
+            summary.Results.Add(passed);
 
             if(passed)
             {
                 passedCount++;
-                Console.WriteLine($"{test.TestName}: PASS");
-            }
-            else
-            {
-                Console.WriteLine($"{test.TestName}: FAIL");
             }
         }
-        Console.WriteLine();
-        Console.WriteLine($"Total tests: {tests.Count}");
-        Console.WriteLine($"Passed tests: {passedCount}");
+
+        TestSummary summary = new ();
+        summary.PassedTests = passedCount;
+        summary.TotalTests = tests.Count;
+        summary.FailedTests = summary.TotalTests - summary.PassedTests;
+
+        return summary;
     }
 }
