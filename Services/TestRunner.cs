@@ -2,30 +2,54 @@ using System.Collections.Generic;
 using TestFlow.Models;
 using System;
 
+
 namespace TestFlow.Services;
 
 public class TestRunner
 {
-    public TestSummary Run(List<TestResult> tests)
+    public TestSummary Run(List<ITestCase> tests)
     {
-        int passedCount = 0;
         TestSummary summary = new ();
         
-        foreach (TestResult test in tests)
+        foreach (ITestCase test in tests)
         {
-            bool passed = test.IsPassed();
-            summary.Results.Add(passed);
-
-            if(passed)
+            try
             {
-                passedCount++;
+                bool passed = test.IsPassed();
+                TestExecutionResult result = new TestExecutionResult
+                {
+                    TestName = test.TestName,
+                    Status = passed? TestExecutionStatus.Passed : TestExecutionStatus.Failed,
+                    ErrorMessage = null
+                };
+
+                summary.Results.Add(result);
+            }
+            catch (ArgumentException ex)
+            {
+                TestExecutionResult result = new TestExecutionResult
+                {
+                    TestName = test.TestName,
+                    Status = TestExecutionStatus.Error,
+                    ErrorMessage = ex.Message
+                };
+                summary.Results.Add(result);
             }
         }
 
-        
-        summary.PassedTests = passedCount;
         summary.TotalTests = tests.Count;
-        summary.FailedTests = summary.TotalTests - summary.PassedTests;
+
+        summary.PassedTests = summary.Results.Count(
+            result => result.Status == TestExecutionStatus.Passed
+        );
+
+        summary.FailedTests = summary.Results.Count(
+            result => result.Status == TestExecutionStatus.Failed
+        );
+        
+        summary.ErrorTests = summary.Results.Count(
+            result => result.Status == TestExecutionStatus.Error
+        );
 
         return summary;
     }

@@ -5,5 +5,6 @@ public class TestSummary
     public int TotalTests { get; set; }
     public int PassedTests { get; set; }
     public int FailedTests { get; set; }
-    public List<bool> Results { get; set; } = new();
+    public int ErrorTests { get; set; }
+    public List<TestExecutionResult> Results { get; set; } = new();
 }
