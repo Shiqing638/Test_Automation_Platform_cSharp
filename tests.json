@@ -1,0 +1,17 @@
+{
+  "suiteName": "Basic Device Tests",
+  "tests": [
+    {
+      "type": "Range",
+      "testName": "Voltage Test 1",
+      "measuredValue": 4.8,
+      "minLimit": 4.6,
+      "maxLimit": 5.0
+    },
+    {
+      "type": "Connection",
+      "testName": "Device Connection Test",
+      "isConnected": true
+    }
+  ]
+}

@@ -26,7 +26,7 @@ The project demonstrates object-oriented programming, interface-based design, au
 ## Project Structure
 
 ```text
-runoob_cSharp/
+TestFlow/
 ├── Models/
 │   ├── ITestCase.cs
 │   ├── RangeTest.cs
@@ -44,7 +44,7 @@ runoob_cSharp/
 │   ├── TestRunnerTests.cs
 │   └── JsonReportExporterTests.cs
 ├── Program.cs
-├── runoob_cSharp.csproj
+├── TestFlow.csproj
 └── README.md
 ```
 

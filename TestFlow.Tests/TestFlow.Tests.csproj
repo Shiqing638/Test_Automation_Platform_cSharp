@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\runoob_cSharp.csproj" />
+    <ProjectReference Include="..\TestFlow.csproj" />
   </ItemGroup>
 
 </Project>

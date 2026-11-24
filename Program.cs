@@ -2,56 +2,65 @@
 using TestFlow.Models;
 using TestFlow.Services;
 using TestFlow.Reporting;
+using TestFlow.Configuration;
+using System.Text.Json;
 class Program
 {
     static void Main(string[] args)
     {
-        List<ITestCase> tests = new()
-        {
-            new RangeTest
-            {
-                TestName = "Voltage Test 1",
-                MeasuredValue = 4.5,
-                MaxLimit = 5.0,
-                MinLimit = 6.6
-            },
-            new RangeTest
-            {
-                TestName = "Voltage Test 2",
-                MeasuredValue = 5.3,
-                MaxLimit = 5.0,
-                MinLimit = 4.6
-            },
-            new RangeTest
-            {
-                TestName = "Voltage Test 3",
-                MeasuredValue = 4.8,
-                MaxLimit = 5.0,
-                MinLimit = 4.6
-            },  
-            new ConnectionTest
-            {
-                TestName = "Device Connection Test",
-                IsConnected = false
-            }          
-        };
-
-        TestRunner runner = new TestRunner();
-
         try
         {
+            // 1. load configuration
+            TestConfigurationLoader loader = new();
+            TestSuiteConfig config = loader.Load("tests.json");
+
+            // 2. Validate configuration
+            TestConfigurationValidator validator = new();
+            validator.Validate(config);
+
+            // 3. Map configuration to test cases
+            TestCaseMapper mapper = new();
+            List<ITestCase> tests = mapper.MapAll(config);
+            
+            // 4. Execute tests
+            Console.WriteLine($"Suite: {config.SuiteName}");
+            TestRunner runner = new TestRunner();
             TestSummary summary = runner.Run(tests);
+
+            // 5. Print results
             PrintSummary(summary);
 
+            // 6. Export report
             JsonReportExporter exporter = new();
-            exporter.Export(summary, "test-report.json");            
+            exporter.Export(summary, "test-report.json");        
         }
-        catch (ArgumentException ex)
+        catch (FileNotFoundException ex)
         {
             Console.WriteLine($"Configuration error: {ex.Message}");
         }
-
+        catch (JsonException ex)
+        {
+            Console.Error.WriteLine(
+                $"Invalid Json: {ex.Message}"
+            );
+        }
+        catch (InvalidDataException ex)
+        {
+            Console.Error.WriteLine(
+                $"Invalid configuration: {ex.Message}");
+        }
+        catch (IOException ex)
+        {
+            Console.Error.WriteLine(
+                $"File operation failed: {ex.Message}");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Console.Error.WriteLine(
+                $"Access denied: {ex.Message}");
+        }
     }
+
     static void PrintSummary(TestSummary summary)
         {
             for (int i = 0; i < summary.Results.Count; i ++)
