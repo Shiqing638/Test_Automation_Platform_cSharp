@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using TestFlow.Models;
 using TestFlow.Services;
+using TestFlow.Reporting;
 class Program
 {
     static void Main(string[] args)
@@ -40,6 +41,19 @@ class Program
         try
         {
             TestSummary summary = runner.Run(tests);
+            PrintSummary(summary);
+
+            JsonReportExporter exporter = new();
+            exporter.Export(summary, "test-report.json");            
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Configuration error: {ex.Message}");
+        }
+
+    }
+    static void PrintSummary(TestSummary summary)
+        {
             for (int i = 0; i < summary.Results.Count; i ++)
             {
                 TestExecutionResult result = summary.Results[i];
@@ -71,36 +85,7 @@ class Program
                 Console.WriteLine(failedName);
             }
 
-            TestSuiteStatus suiteStatus;
-
-            if(summary.TotalTests == 0)
-            {
-                suiteStatus = TestSuiteStatus.NoTests;
-            }
-            else if (summary.FailedTests == 0 && summary.ErrorTests == 0)
-            {
-                suiteStatus = TestSuiteStatus.Passed;
-            }
-            else
-            {
-                suiteStatus = TestSuiteStatus.Failed;
-            }
-
-            Console.WriteLine($"Test suite status: {suiteStatus}");
+            Console.WriteLine($"Test suite status: {summary.Status}");
+            
         }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine($"Configuration error: {ex.Message}");
-        }
-
-        ITestCase test = new RangeTest
-        {
-            TestName = "Voltage Test",
-            MeasuredValue = 4.8,
-            MinLimit = 4.5,
-            MaxLimit = 5.0
-        };
-
-        Console.WriteLine(test.IsPassed());
-    }
 }
