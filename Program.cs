@@ -4,12 +4,33 @@ using TestFlow.Services;
 using TestFlow.Reporting;
 using TestFlow.Configuration;
 using System.Text.Json;
+using TestFlow.Database;
+using Microsoft.Extensions.Logging;
+
+
 class Program
 {
     static void Main(string[] args)
     {
         try
         {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+                builder.SetMinimumLevel(LogLevel.Information);
+            });
+
+            ILogger<TestRunRepository> repositoryLogger = 
+                loggerFactory.CreateLogger<TestRunRepository>();
+
+            string connectionString =
+                Environment.GetEnvironmentVariable("TESTFLOW_DB_CONNECTION")
+                ?? throw new InvalidOperationException(
+                    "Database connection string is missing."
+                );
+
+            SqlConnectionFactory factory = new(connectionString);
+
             // 1. load configuration
             TestConfigurationLoader loader = new();
             TestSuiteConfig config = loader.Load("tests.json");
@@ -26,6 +47,24 @@ class Program
             Console.WriteLine($"Suite: {config.SuiteName}");
             TestRunner runner = new TestRunner();
             TestSummary summary = runner.Run(tests);
+
+            TestRunRepository repository = new(factory, repositoryLogger);
+            int runId = repository.Save(config.SuiteName, summary);
+
+            List<TestRunRecord> runs = repository.GetAllRuns();
+
+            Console.WriteLine("\nTest History:");
+
+            foreach (var run in runs)
+            {
+                Console.WriteLine(
+                    $"{run.RunId} |  {run.SuiteName}" + 
+                    $"{run.ExecutedAt} | {run.Status}"
+                );
+            }
+
+            Console.WriteLine($"Test run saved. RunId: {runId}");
+
 
             // 5. Print results
             PrintSummary(summary);
